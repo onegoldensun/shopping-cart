@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+     <meta charset="UTF-8">
+     <title>购物车</title>
+     <link rel="stylesheet" ><!--href="css/style.css">-->
+     <!--<script type="text/javascript" src="script.js"></script>-->
+     <script type="text/javascript" src="jquery/jquery-3.1.1.js"></script>
+     <script type="text/javascript">
+     
+   
+  $(function(){
+   
+    
+    //计算总金额和数量
+    function totalMoney(){
+      var total_price = 0;
+      var total_count = 0;
+      
+      $(".check-one").each(function(){
+
+        if($(this).is(':checked')==true) {
+
+         var countdan = $(this).parent().siblings(".count").find(".count-input").attr("value");//获取一行的数量
+          //获取一行的商品数量
+          total_count += parseInt(countdan);
+          var subtotal= $(this).parent().siblings(".subtotal").text();//获取一行的金额
+          total_price += parseFloat(subtotal);
+            
+        }
+      });
+      $("#priceTotal").text(total_price);//将计算出的总金额显示
+      $("#selectedTotal").text(total_count);//将计算出的总数量显示
+    }
+    
+   
+    // 加
+    $(".max").click(function(){
+      var input = $(this).siblings(".count-input");
+      var obj = $(this).parents(".count");
+      var per = parseFloat(obj.siblings(".price").text());//获取当前一行的单价
+      var num = '';
+      var price = '';
+      input.attr("value", parseInt(input.attr("value")) + 1 );//数量加1
+      num = input.attr("value");
+      price = num*per;//
+      obj.siblings(".subtotal").text(price);
+     // count();
+      totalMoney();
+    })
+    // 减
+    $(".min").click(function(){
+      var input = $(this).siblings(".count-input");
+      var obj = $(this).parents(".count");
+      var per = parseFloat(obj.siblings(".price").text());//获取当前一行的单价
+      var num = '';
+      var price = '';
+      var Val = parseInt(input.attr("value"));
+      if(Val <= 1){
+        Val = 2;        }
+      input.attr("value", parseInt(Val) - 1 );//数量减1
+      num = input.attr("value");
+      price = num*per;//
+      obj.siblings(".subtotal").text(price);
+     // count();
+      totalMoney();
+    })
+    //单选
+      $(".check-one").click(function(){
+         totalMoney();
+
+        // count();
+      });
+      //全选
+      $(".check-all").click(function(){
+          if($(".check-all").is(':checked')==true){
+            $(".check-one").attr("checked", "checked");  
+          }
+          else 
+            $(".check-one").removeAttr("checked");  
+           totalMoney();
+     });
+      totalMoney();
+  });
+  
+
+</script>
+    
+ 
+ </head>  
+ <body>
+ <table id="carTable">
+      <thread>
+            <tr class="tr"> 
+                 <th><label><input class="check-all check" type="checkbox"/>&nbsp;全选</label></th>
+                 <th>商品</th>
+                 <th>单价</th>
+                 <th>数量</th>
+                 <th>小计</th>
+                 <th>操作</th>
+             </tr>
+       </thread>
+       <tbody>
+             <tr class="tr">
+                <td class="checkbox"><input class="check-one" type="checkbox"/></td>
+                <td class="goods"><img src="images/1.png" alt=""/> 卡西欧</td>
+                <td class="price">5999.8</td>
+                <td class="count"><input class="min" name="" type="button" value="-" /> 
+                                  <input class="count-input" type="text" value="1"/>
+                                  <input class="max" name="" type="button" value="+" /> 
+                                  </td>
+                <td class="subtotal"><span class="price">5999.8</span></td>
+                <td class="operation">删除</td>
+              </tr>
+              <tr>
+                <td class="checkbox"><input class="check-one check" type="checkbox"/></td>
+                <td class="goods"><img src="images/2.png" alt=""/> 精品女装</td>
+                <td class="price">162</td>
+                <td class="count"><input class="min" name="" type="button" value="-" /> 
+                                  <input class="count-input" type="text" value="1"/>
+                                  <input class="max" name="" type="button" value="+" /> 
+                                  </td>
+                <td class="subtotal"><span class="price">162</span></td>
+                <td class="operation">删除</td>
+              </tr>
+              <tr class="tr">
+                <td class="checkbox"><input class="check-one check" type="checkbox"/></td>
+                <td class="goods"><img src="images/3.png" alt=""/> 太阳镜</td>
+                <td class="price">200</td>
+                <td class="count"> <input class="min" name="" type="button" value="-" /> 
+                                   <input class="count-input" type="text" value="1"/>
+                                  <input class="max" name="" type="button" value="+" /> 
+                                  </td>
+                <td class="subtotal"><span class="price">200</span></td>
+                <td class="operation">删除</td>
+              </tr>
+              <tr class="tr">
+                <td class="checkbox"><input class="check-one check" type="checkbox"/></td>
+                <td class="goods"><img src="images/4.png" alt=""/> 幼儿奶粉</td>
+                <td class="price">351</td>
+                <td class="count"> <input class="min" name="" type="button" value="-" /> 
+                                   <input class="count-input" type="text" value="1"/>
+                                  <input class="max" name="" type="button" value="+" /> 
+                                </td>
+                <td class="subtotal"><span class="price">351</span></td>
+                <td class="operation">删除</td>
+               </tr>
+        </tbody>    
+ </table>
+ <div class="foot" id="foot">
+ 	<label class="fl select-all"><input type="checkbox" class="check-all check"/>&nbsp;全选</label>
+ 	<a class="fl delete" id="deleteAll" href="javascript:;">删除</a>
+ 	<div class="fr closing">结算</div>
+ 	<div class="fr total">合计：￥<span id="priceTotal">0.00</span></div>
+ 	<div class="fr selected" id=" selected">已选商品
+ 		<span id="selectedTotal">0</span>件
+ 		<span class="arrow up"><</span>
+ 		<span class="arrow down">></span>
+ 	</div>
+ 	<div class="selected-view">
+ 		<div id="selectedViewList" class="clearfix">
+
+ 		</div>
+ 		<span class="arrow">.<span>.</span></span>	
+ </body>
+ </html>
